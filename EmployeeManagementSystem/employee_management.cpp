@@ -240,7 +240,6 @@ DLinklist EmployeeManage::searchEmployeeCore(int workerId = -1, string name = "n
 	return retResultList;
 }
 
-
 void EmployeeManage::deleteEmployee() {
 	if (!this->fileEmptyFlag) {
 		cout << "文件不存在或记录为空！" << endl;
@@ -281,7 +280,6 @@ void EmployeeManage::deleteEmployee() {
 	system("pause");
 	system("cls");
 }
-
 
 void EmployeeManage::findEmployee() {
 
