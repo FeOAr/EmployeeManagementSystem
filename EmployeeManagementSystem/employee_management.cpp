@@ -5,18 +5,19 @@
 #include"manager.h"
 #include<string>
 
+
 EmployeeManage::EmployeeManage() {
 
 	fileEmpty();
 
 	this->empNum = 0;
-	this->empHead.next = NULL;  //头节点初始化
+	this->empHead.next = NULL;  /*头节点初始化*/
 	this->empHead.prior = NULL;
 
 	if (this->fileEmptyFlag) {
 		int num = this->getEmpNum();
 		cout << "已读取职工个数为：" << num << endl;
-		this->empNum = num;  //更新成员属性
+		this->empNum = num;  /*更新成员属性*/
 		this->initEmployee();
 	}
 }
@@ -40,11 +41,11 @@ void EmployeeManage::showMenu() {
 
 void EmployeeManage::addEmployee() {
 
-	string name; //职工姓名
-	int workerId; //职工编号(局域)
-	int depSelect; //所选部门名称编号
+	string name; /*职工姓名*/
+	int workerId; /*职工编号(局域)*/
+	int depSelect; /*所选部门名称编号*/
 
-	//填充数据
+	/*填充数据*/
 	cout << "输入职工编号: ";
 	cin >> workerId;
 	cout << "输入职工姓名：";
@@ -71,12 +72,12 @@ void EmployeeManage::addEmployeeCore(string name, int workerId, int depSelect) {
 		exit(0);
 	}
 
-	//如果头节点后没有节点
+	/*如果头节点后没有节点*/
 	if (this->empHead.next == NULL) {
 		this->empHead.next = tempNode;
 		tempNode->prior = &this->empHead;
 	}
-	else {//头插法
+	else {/*头插法*/
 		tempNode->next = this->empHead.next;
 		this->empHead.next->prior = tempNode;
 		tempNode->prior = &this->empHead;
@@ -85,13 +86,13 @@ void EmployeeManage::addEmployeeCore(string name, int workerId, int depSelect) {
 
 	switch (depSelect)
 	{
-	case 1: //普通员工
-		tempNode->data = new Employee(name, workerId, 1);  //注意多态
+	case 1: /*普通员工*/
+		tempNode->data = new Employee(name, workerId, 1);  /*注意多态*/
 		break;
-	case 2: //经理
+	case 2: /*经理*/
 		tempNode->data = new Manager(name, workerId, 2);
 		break;
-	case 3:  //老板
+	case 3:  /*老板*/
 		tempNode->data = new Boss(name, workerId, 3);
 		break;
 	default:
@@ -102,7 +103,7 @@ void EmployeeManage::addEmployeeCore(string name, int workerId, int depSelect) {
 
 void EmployeeManage::save() {
 
-	DLinklist tempOut;  //输出用
+	DLinklist tempOut;  /*输出用*/
 	tempOut = &this->empHead;
 	ofstream ofs;
 	ofs.open(FILENAME, ios::out);
@@ -127,9 +128,9 @@ int EmployeeManage::getEmpNum()
 
 	int num = 0;
 
-	while (ifs >> name && ifs >> workerId && ifs >> departmentId)//一行一个人
+	while (ifs >> name && ifs >> workerId && ifs >> departmentId)  /*一行一个人*/
 	{
-		//记录人数
+		/*记录人数*/
 		num++;
 	}
 	ifs.close();
@@ -159,7 +160,7 @@ void EmployeeManage::showEmployee() {
 	{
 		while (tempNode->next != NULL)
 		{
-			//遍历输出，正向，顺next
+			/*遍历输出，正向，顺next*/
 			tempNode = tempNode->next;
 			tempNode->data->showInfo();
 		}
@@ -175,9 +176,9 @@ void EmployeeManage::fileEmpty() {
 	ifstream ifs;
 	ifs.open(FILENAME, ios::in);
 
-	//文件存在，并且没有记录
+	/*文件存在，并且没有记录*/
 	char ch;
-	ifs >> ch; //先只读一个字符，然后判断这个字符是不是EOF
+	ifs >> ch; /*先只读一个字符，然后判断这个字符是不是EOF*/
 	if (ifs.eof())
 	{
 		cout << "文件为空!!" << endl;
@@ -185,13 +186,13 @@ void EmployeeManage::fileEmpty() {
 		this->fileEmptyFlag = false;
 		ifs.close();
 	}
-	//文件不存在情况
+	/*文件不存在情况*/
 	else if (!ifs.is_open())
 	{
-		cout << "文件不存在!!" << endl; //测试输出
-		this->empNum = 0;  //初始化人数
-		this->fileEmptyFlag = false; //初始化文件为空标志
-		ifs.close(); //关闭文件
+		cout << "文件不存在!!" << endl; /*测试输出*/
+		this->empNum = 0;  /*初始化人数*/
+		this->fileEmptyFlag = false; /*初始化文件为空标志*/
+		ifs.close(); /*关闭文件*/
 	}
 	else
 	{
@@ -201,14 +202,14 @@ void EmployeeManage::fileEmpty() {
 
 DLinklist EmployeeManage::searchEmployeeCore(int workerId = -1, string name = "null") {
 
-	DLinklist tempSearchNode = &this->empHead;  //遍历用的指针
-	DLinklist retResultList = new DNode;  //结果串成链返回
+	DLinklist tempSearchNode = &this->empHead;  /*遍历用的指针*/
+	DLinklist retResultList = new DNode;  /*结果串成链返回*/
 	DLinklist operateTool = nullptr;
 
 	retResultList->next = nullptr;
 	retResultList->prior = nullptr;
 
-	while (tempSearchNode->next != nullptr) //nullptr
+	while (tempSearchNode->next != nullptr) /*nullptr*/
 	{
 		tempSearchNode = tempSearchNode->next;
 		if ((tempSearchNode->data->workerId == workerId) || (tempSearchNode->data->name == name)) {
@@ -217,10 +218,10 @@ DLinklist EmployeeManage::searchEmployeeCore(int workerId = -1, string name = "n
 			operateTool->next = nullptr;
 
 			if ((retResultList->next == NULL) && (operateTool != NULL)) {
-				//空链表
+				/*空链表*/
 				retResultList->next = operateTool;
 			}
-			else {//头插法
+			else {/*头插法*/
 				operateTool->next = retResultList->next;
 				retResultList->next = operateTool;
 			}
@@ -248,8 +249,8 @@ void EmployeeManage::deleteEmployee() {
 		int workId = 0;
 		DLinklist tempNode = NULL;
 		DLinklist operateTool = nullptr;
-		char deleteChoice = 'n';  //默认不删除
-		cout << "请输入想要删除的职工号：" << endl;  //偷个懒，排除按姓名删除的方式
+		char deleteChoice = 'n';  /*默认不删除*/
+		cout << "请输入想要删除的职工号：" << endl;
 		cin >> workId;
 
 		tempNode = this->searchEmployeeCore(workId);
@@ -284,17 +285,17 @@ void EmployeeManage::deleteEmployee() {
 void EmployeeManage::findEmployee() {
 
 	string searchKeyWord = "";
-	DLinklist tempNode = nullptr;  //用来接收结果链表
-	DLinklist operateTool = nullptr;  //用来操作结果链表
-	DLinklist deleteTool = nullptr;  //用来清除结果链表
+	DLinklist tempNode = nullptr;  /*用来接收结果链表*/
+	DLinklist operateTool = nullptr;  /*用来操作结果链表*/
+	DLinklist deleteTool = nullptr;  /*用来清除结果链表*/
 	cout << "请输入职员编号或姓名：";
 	cin >> searchKeyWord;
 	if (((int)searchKeyWord[0] >= 48) && ((int)searchKeyWord[0] <= 57)) {
-		//输入为编号
+		/*输入为编号*/
 		tempNode = this->searchEmployeeCore(stoi(searchKeyWord));
 	}
 	else {
-		//输入为姓名
+		/*输入为姓名*/
 		tempNode = this->searchEmployeeCore(-1, searchKeyWord);
 	}
 
@@ -346,10 +347,10 @@ void EmployeeManage::editEmlpoyeeInfo() {
 			cout << "1.普通职工" << "\t2.经理" << "\t3.老板" << endl;
 			cin >> newDepartmentId;
 
-			//因为不同职位有相应子类，所以重新创建，复用增加功能核心
+			/*因为不同职位有相应子类，所以重新创建，复用增加功能核心*/
 			this->addEmployeeCore(newName, newWorkerId, newDepartmentId);
 
-			//删除旧节点
+			/*删除旧节点*/
 			tempNode->next->prior->prior->next = tempNode->next->prior->next;
 			tempNode->next->prior->next->prior = tempNode->next->prior->prior;
 			delete tempNode->next;
@@ -387,7 +388,7 @@ void EmployeeManage::sortEmployeeCore(DLinklist head, DLinklist tail) {
 
 	if ((head != tail) && (head != tail->next))
 	{
-		pivotWorkId = head->data; //最左侧为枢轴元素
+		pivotWorkId = head->data;  /*最左侧为枢轴元素*/
 		left = head;
 		right = tail;
 		while ((left != right) && (left != right->next)) /*左右一起完成全部遍历*/
@@ -395,7 +396,7 @@ void EmployeeManage::sortEmployeeCore(DLinklist head, DLinklist tail) {
 			/*枢轴留出空位，挖坑法*/
 			while (right != left)
 			{
-				if (right->data->workerId < pivotWorkId->workerId)
+				if (right->data->workerId < pivotWorkId->workerId)  /*修改此处与下方的关系符号可调整排序方向*/
 				{
 					/*暂不考虑等于，因为员工编号不会一样*/
 					left->data = right->data;
@@ -406,7 +407,7 @@ void EmployeeManage::sortEmployeeCore(DLinklist head, DLinklist tail) {
 			}
 			while (right != left)
 			{
-				if (left->data->workerId > pivotWorkId->workerId)
+				if (left->data->workerId > pivotWorkId->workerId)  /*调整排序方向*/
 				{
 					right->data = left->data;
 					right = right->prior;
@@ -428,11 +429,11 @@ void EmployeeManage::testForPrior() {
 	tempNode = &this->empHead;
 	while (tempNode->next != NULL)
 	{
-		//遍历输出，正向，顺next
+		/*遍历输出，正向，顺next*/
 		tempNode = tempNode->next;
 		if (tempNode->data->workerId == 3)
 		{
-			endPoint = tempNode;  //找到最后一个节点，创建尾指针
+			endPoint = tempNode;  /*找到最后一个节点，创建尾指针*/
 			while (endPoint->prior != NULL)
 			{
 				endPoint->data->showInfo();
@@ -446,7 +447,7 @@ void EmployeeManage::testForPrior() {
 
 
 void EmployeeManage::cleanFile() {
-	char deleteChoice = 'n';  //默认不清空
+	char deleteChoice = 'n';  /*默认不清空*/
 	DLinklist operateTool = this->empHead.next;
 	DLinklist deleteTool = nullptr;
 	cout << "是否清空？(y/n)";
@@ -473,7 +474,6 @@ void EmployeeManage::cleanFile() {
 
 void EmployeeManage::exitSystem() {
 	cout << "感谢使用，再见 (づ￣ 3￣)づ" << endl;
-	system("pause");
 	system("pause");
 	exit(0);
 }

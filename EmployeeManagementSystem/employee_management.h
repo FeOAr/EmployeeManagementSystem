@@ -18,7 +18,6 @@ public:
 	void showEmployee();  //显示职员
 	void fileEmpty();  //文件判空
 	void deleteEmployee();  //删除职员
-	//void deleteEmployeeCore();  //删除功能核心
 	DLinklist searchEmployeeCore(int, string);  //查找功能核心
 	void findEmployee();  //查找职员
 	void editEmlpoyeeInfo();
